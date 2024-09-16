@@ -4,7 +4,7 @@ search.addEventListener('click', () => {
 })
 
 function getWeather (){
-    const API_KEY = 'd5a36f3d4af637bcabd2d23665a84b18'
+    const API_KEY = 'your API key'
     const  city = document.getElementById('input_city').value
 
     if(!city){
