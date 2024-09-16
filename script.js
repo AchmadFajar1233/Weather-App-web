@@ -26,7 +26,9 @@ function getWeather (){
 
     fetch(forcastUrl)
     .then(responese => responese.json())
-    .then(data => console.log(data.list))
+    .then((data) => {
+        displayHourlyWeather(data.list)
+    })
     .catch((error) => {
         console.log(`error fetching hourly weather data ${error}`)
         alert(`error fetching weather hourly please try again`)
@@ -42,7 +44,7 @@ function displayWeather (data) {
     weatherInfo.innerHTML = ''
     
     if(data.cod === '404'){
-        mainInfoContainer.innerHTML =`<p>${data.message}</p>`
+        mainInfoContainer.innerHTML =`<h1>${data.message}</h1>`
     } else{
         const tempData = `${Math.round(data.main.temp - 273.15)} °C` //convert to celcius
         const iconUrlCode = data.weather[0].icon
@@ -57,5 +59,27 @@ function displayWeather (data) {
                     <p id="">${descriptionWeather}</p>`
     }
     
+}
+function displayHourlyWeather(hourlyData){
+    const hourlyContainer = document.querySelector('.weather__hourly')
+    const hourBefore24 = hourlyData.slice(0, 6) //cut array
+    console.log(hourBefore24)
+    
+    hourlyContainer.innerHTML = ''
+    
+    hourBefore24.forEach((item, itemIndex) => {
+        const dateTime = new Date(item.dt * 1000).getHours() //convert tempstamp to miliseconds
+        const temperature = Math.round(item.main.temp - 273.15) //conveert to celcius
+        const iconCode = item.weather[0].icon
+        const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@4x.png`
+
+        hourlyContainer.innerHTML += 
+        `<div class="hourly__item" id="id-${itemIndex}">
+        <span>${temperature}°C</span>
+        <img src ="${iconUrl}" alt="icon" />
+        <span>${dateTime}:00</span>
+        </div>`
+
+    })
 }
 
